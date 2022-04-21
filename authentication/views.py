@@ -2,6 +2,9 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from .serializer import RegisterSerializer
 from .utils import Util
+from .models import User
+from django.conf import settings
+import jwt
 
 
 class RegisterView(generics.CreateAPIView):
@@ -26,6 +29,26 @@ class RegisterView(generics.CreateAPIView):
             return Response({'error': str(err)}, status = status.HTTP_400_BAD_REQUEST)
 
 class VerifyEmail(generics.GenericAPIView):
-    "verifies user email"
-    def get(self):
-        pass
+    "decodes the token sent to the user to verify the email"
+    #: this function is triggered when user clicks on the link 
+    #: sent to his email2
+
+    def get(self, request):
+        token = request.Get['token']
+        try:
+            #: get secret key from settings
+            secret_key = settings.SECRET_KEY
+
+            #: decode the token sent to the user
+            payload = jwt.decode(token, secret_key)
+            user = User.objects.get(id = payload['user_id'])
+
+            #: verify user
+            if not user.is_verified():
+                user.is_verified = True
+                user.save()
+            return Response({'email': 'Email successfully activated'}, status= status.HTTP_200_OK)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Linked expired'}, status = status.HTTP_400_BAD_REQUEST)
+        except jwt.DecodeError:
+            return Response({'error': 'Invalid token'}, status = status.HTTP_400_BAD_REQUEST)
