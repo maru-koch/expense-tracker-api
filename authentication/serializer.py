@@ -9,11 +9,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'password']
 
     def validate(self, attrs):
-        email = attrs.get('email')
-        username = attrs.get('username')
+        print('Reached here')
+        email = attrs.get('email', '')
+        username = attrs.get('username', '')
         if not username.isalnum():
             raise serializers.ValidationError('user name should only contain aplha-numerical characters ')
+        return attrs
 
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        return user
+        return User.objects.create(**validated_data)
+        

@@ -44,7 +44,15 @@ INSTALLED_APPS = [
 
 ] + CUSTOM_APPS
 
+#: adding 'S' to the headache here will cause you serious trouble
+#: not adding line 49 to this settings.py will cause more trouble
 AUTH_USER_MODEL = 'authentication.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSESS': ('rest_framework.permissions.AllowAny'),
+    #: not adding comma at the end of the value in the tuple will wreck a life
+    'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework_simplejwt.authentication.JWTAuthentication'],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -128,3 +136,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'marukoch.ng@gmail.com'
+EMAIL_HOST_PASSWORD = 'maruchE*001'

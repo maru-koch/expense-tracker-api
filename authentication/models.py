@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 
 class UserManager(BaseUserManager):
-
     def create_user(self, username, email, password = None):
         if username is None:
             raise TypeError('Username cannot be empty')
@@ -33,9 +32,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now = True)
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default= True)
+    is_staff = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
+    
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    objects = UserManager()
 
     def __str__(self):
         return self.username
