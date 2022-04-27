@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 CUSTOM_APPS =[
     'rest_framework',
     'authentication',
-    'drf_yasg',
+    # 'drf_yasg',
 ]
 
 INSTALLED_APPS = [

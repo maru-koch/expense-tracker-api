@@ -30,18 +30,30 @@ class EmailverificationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=200)
     password = serializers.CharField(max_length=200)
+    username = serializers.CharField(max_length= 255, read_only = True)
+    token = serializers.CharField(max_length=255, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['email', 'password', 'username', 'token']
 
     def validate(self, attr):
         email = attr.get('email', '')
         password = attr.get('password', '')
         user = authenticate(email = email, password = password)
 
-        if not user.is_verified:
-            raise AuthenticationFailed('Invalid credentials')
-        if not user.is_active:
-            raise AuthenticationFailed('Account Inactive')
-        if user is not None:
+        if user is None:
             raise AuthenticationFailed("Invalid account credentials")
+        
+        if not user.is_active:
+            raise AuthenticationFailed("Your account is not active")
+        
+        if not user.is_verified:
+            raise AuthenticationFailed("Your account is not Verified")
+        
+        
+        
+        
 
         return {
             'email':user.email,
