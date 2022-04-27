@@ -15,9 +15,27 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+# from drf_yasg import openapi
+# from drf_yasg.views import get_schema_view
+
+
+# schema_view = get_schema_view(
+
+#         openapi.Info(
+#                 title= "Expense Tracking App",
+#                 default_version = 'v1',
+#                 describtion= "An application to monitor personal expenses",
+#                 contact = openapi.Contact(email = '#'), 
+#                 licence = openapi.Licence(name = "Expense Licence",)
+#         ),
+
+#         public=True,
+#         permission_classes = (permissions.AllowAny,)
+# )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('authentication.urls'))
-   
+    path('auth/', include('authentication.urls')), 
+    # path('swagger/', schema_view.with_ui('swagger')),
+    # path('redoc/', schema_view.with_ui('redoc')),
 ]

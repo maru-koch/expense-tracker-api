@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 CUSTOM_APPS =[
     'rest_framework',
     'authentication',
+    'drf_yasg',
 ]
 
 INSTALLED_APPS = [
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'drf_yasg',
+    
 
 ] + CUSTOM_APPS
 
@@ -138,6 +141,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #: to use your email to send message: turn on less secure app (gmail settings)
+#: make sure your gmail less secure app settings is turned on.
+
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

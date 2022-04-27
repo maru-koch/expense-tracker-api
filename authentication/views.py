@@ -1,6 +1,6 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, views
 from rest_framework.response import Response
-from .serializer import RegisterSerializer
+from .serializer import RegisterSerializer, EmailverificationSerializer, LoginSerializer
 from .utils import Util
 from .models import User
 from django.conf import settings
@@ -14,7 +14,6 @@ class RegisterView(generics.CreateAPIView):
     def post(self, request):
         # serializer = self.serializer_class(data=request.data)
         try:
-            
             user = request.data
             print('USER', user)
             serializer = self.serializer_class(data=user, context={'request':request})
@@ -28,8 +27,11 @@ class RegisterView(generics.CreateAPIView):
         except Exception as err:
             return Response({'error': str(err)}, status = status.HTTP_400_BAD_REQUEST)
 
-class VerifyEmail(generics.GenericAPIView):
+class VerifyEmail(views.APIView):
+    
     "decodes the token sent to the user to verify the email"
+    
+    serializer_class = EmailverificationSerializer
     #: this function is triggered when user clicks on the link 
     #: sent to his email2
 
@@ -41,6 +43,8 @@ class VerifyEmail(generics.GenericAPIView):
 
             #: decode the token sent to the user
             payload = jwt.decode(token, secret_key)
+
+            #: identify the user from the token
             user = User.objects.get(id = payload['user_id'])
 
             #: verify user
@@ -52,3 +56,14 @@ class VerifyEmail(generics.GenericAPIView):
             return Response({'error': 'Linked expired'}, status = status.HTTP_400_BAD_REQUEST)
         except jwt.DecodeError:
             return Response({'error': 'Invalid token'}, status = status.HTTP_400_BAD_REQUEST)
+
+class LoginAPIView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+
+    def post(self, request):
+        user = request.data
+        serializer = self.serializer_class(data = user)
+        serializer.is_valid(raise_exceptions = True)
+        return Response(serializer.data, status = status.HTTP_200_OK)
+
+
