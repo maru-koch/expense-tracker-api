@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -33,7 +35,7 @@ CUSTOM_APPS =[
     'rest_framework',
     'authentication',
     'expenses',
-    'drf_spectacular',
+    # 'drf_spectacular',
 ]
 
 INSTALLED_APPS = [
@@ -53,7 +55,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSESS': ('rest_framework.permissions.AllowAny'),
 
     #: drf_spectacular supports openapi 3.0 while drf_yasg only supports openapi 2.
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # 'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     
     #: not adding comma at the end of the value in the tuple will wreck a life
     'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework_simplejwt.authentication.JWTAuthentication'],
@@ -153,8 +155,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #: to use your email to send message: turn on less secure app (gmail settings)
 #: make sure your gmail less secure app settings is turned on.
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'marukoch.ng@gmail.com'
-EMAIL_HOST_PASSWORD = 'maruchE*001'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
