@@ -32,7 +32,8 @@ ALLOWED_HOSTS = []
 CUSTOM_APPS =[
     'rest_framework',
     'authentication',
-    # 'drf_yasg',
+    'expenses',
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = [
@@ -42,9 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'drf_yasg',
-    
-
 ] + CUSTOM_APPS
 
 #: adding 'S' to the headache here will cause you serious trouble
@@ -53,8 +51,20 @@ AUTH_USER_MODEL = 'authentication.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSESS': ('rest_framework.permissions.AllowAny'),
+
+    #: drf_spectacular supports openapi 3.0 while drf_yasg only supports openapi 2.
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    
     #: not adding comma at the end of the value in the tuple will wreck a life
     'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework_simplejwt.authentication.JWTAuthentication'],
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
 }
 
 MIDDLEWARE = [

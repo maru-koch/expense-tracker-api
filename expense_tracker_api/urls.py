@@ -15,27 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-# from drf_yasg import openapi
-# from drf_yasg.views import get_schema_view
-
-
-# schema_view = get_schema_view(
-
-#         openapi.Info(
-#                 title= "Expense Tracking App",
-#                 default_version = 'v1',
-#                 describtion= "An application to monitor personal expenses",
-#                 contact = openapi.Contact(email = '#'), 
-#                 licence = openapi.Licence(name = "Expense Licence",)
-#         ),
-
-#         public=True,
-#         permission_classes = (permissions.AllowAny,)
-# )
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from rest_framework import permissions
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('authentication.urls')), 
-    # path('swagger/', schema_view.with_ui('swagger')),
-    # path('redoc/', schema_view.with_ui('redoc')),
+    path('expense/', include('expenses.urls')),
+    # YOUR PATTERNS
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]

@@ -29,7 +29,7 @@ class EmailverificationSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=200)
-    password = serializers.CharField(max_length=200)
+    password = serializers.CharField(max_length=200, write_only = True)
     username = serializers.CharField(max_length= 255, read_only = True)
     token = serializers.CharField(max_length=255, read_only=True)
 
@@ -48,19 +48,7 @@ class LoginSerializer(serializers.ModelSerializer):
         if not user.is_active:
             raise AuthenticationFailed("Your account is not active")
         
-        if not user.is_verified:
-            raise AuthenticationFailed("Your account is not Verified")
-        
-        
-        
-        
-
-        return {
-            'email':user.email,
-            'password':user.password,
-            'token':user.token()
-            
-        }
+        return { 'email':user.email, 'password':user.password, 'token':user.token()}
 
 
 
